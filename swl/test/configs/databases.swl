@@ -1,0 +1,7 @@
+/**
+ * Example:
+ * Note: if your password haves the ':', '@', and/or '/' characters, use the '\'
+ * (backslash) to escape it
+database env#development# 'example' -> 'mysql://user:password@localhost:3306/schema' as default
+ *        ^opt environment    ^alias    ^driver  ^user  ^pass   ^host   ^port ^schema   ^default connection
+ */

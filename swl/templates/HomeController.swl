@@ -1,0 +1,5 @@
+controller Home {
+    action '/' -> index {
+        @view.message = "It's work!";
+    }
+}

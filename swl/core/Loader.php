@@ -2,6 +2,8 @@
 
 namespace swl\core;
 
+use \Exception;
+
 require_once __DIR__ . \DIRECTORY_SEPARATOR . 'StateRegister.php';
 
 /**
@@ -13,21 +15,21 @@ class Loader
 {
 
     /**
-     * @var Namespaces
+     * @var \swl\core\Namespaces
      */
     private $namespaces;
 
     private function __construct()
     {
-        $this->namespaces = Namespaces::GetInstance();
-        StateRegister::SetRegister(__CLASS__, $this);
+        $this->namespaces = \swl\core\Namespaces::GetInstance();
+        \swl\core\StateRegister::SetRegister(__CLASS__, $this);
 
-        /* @var $loader Loader */
+        /* @var $loader \swl\core\Loader */
         $loader = $this;
 
         spl_autoload_register(function ($path) use (&$loader)
         {
-            /* @var $loader Loader */
+            /* @var $loader \swl\core\Loader */
             $loader->Load($path);
         }, true, true);
     }
@@ -40,7 +42,7 @@ class Loader
 
         if ((!\is_file($file) || \is_dir($file)) && \stripos($path, '\\') !== false)
         {
-            throw new \Exception("Não foi possível encontrar a definição de objeto '{$path}'");
+            throw new Exception("Não foi possível encontrar a definição de objeto '{$path}'");
         }
         else if (\stripos($path, '\\') !== false)
         {

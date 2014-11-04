@@ -2,6 +2,12 @@
 
 namespace swl\core;
 
+use \BadMethodCallException,
+    \Exception,
+    \swl\core\exceptions\FileNotFoundException,
+    \swl\core\exceptions\InvalidFileException,
+    \swl\core\exceptions\LexicalException;
+
 /**
  * Description of Lexer
  *
@@ -11,6 +17,7 @@ class Lexer
 {
 
     private $file;
+    private $content;
 
     public function __construct($file)
     {
@@ -19,37 +26,42 @@ class Lexer
 
     /**
      * @param string $file
-     * @return Generator
+     * @return \swl\core\Token[]
      * @throws Exception
      */
-    public static function run($file)
+    public static function &run($file)
     {
-        $d = new Lexer($file);
-        return $d->analize();
+        $d = new \swl\core\Lexer($file);
+        $a = &$d->analize();
+        return $a;
     }
 
     /**
-     * @return Generator
+     * @return \swl\core\Token[]
      * @throws Exception
      */
-    public function analize()
+    public function &analize()
     {
-        if (!\file_exists($this->file))
+        if (!$this->file && !$this->content)
         {
-            throw new Exceptions\FileNotFoundException($this->file);
+            throw new BadMethodCallException("Please, enter the file source code.");
         }
-        else if (\is_dir($this->file))
+        else if (!\file_exists($this->file) && !$this->content)
         {
-            throw new Exceptions\InvalidFileException("The file is a directory.",
-                                                      $this->file);
+            throw new FileNotFoundException($this->file);
         }
-        else if (!\preg_match('/(\.swl)$/i', $this->file))
+        else if (\is_dir($this->file) && !$this->content)
         {
-            throw new Exceptions\InvalidFileException("The file is not a SWL source code.",
-                                                      $this->file);
+            throw new InvalidFileException("The file is a directory.",
+                                           $this->file);
+        }
+        else if (!\preg_match('/(\.swl)$/i', $this->file) && !$this->content)
+        {
+            throw new InvalidFileException("The file is not a SWL source code.",
+                                           $this->file);
         }
 
-        $source = \file_get_contents($this->file);
+        $source = !(!$this->file) ? \file_get_contents($this->file) : $this->content;
         $source = \str_replace("\r", "\n", \str_replace("\r\n", "\n", $source)) . "\n";
         $chars  = \str_split($source);
 
@@ -77,9 +89,12 @@ class Lexer
                 if ((($initialStringChar === '"' && $currChar === '"') || ($initialStringChar ===
                         "'" && $currChar === "'")) && $lastChar !== '\\')
                 {
-                    yield new Token($initialStringChar === '"' ? 'T_ESCAPED_STRING'
+                    $r = new \swl\core\Token($initialStringChar === '"' ? 'T_ESCAPED_STRING'
                                         : 'T_UNESCAPED_STRING', $sequence,
-                                    $line, $iniPos);
+                                             $line, $iniPos, $this->file);
+
+                    yield $r;
+
                     $sequence = "";
                     $inString = false;
                     continue;
@@ -101,9 +116,12 @@ class Lexer
                 if (($initialCommentChars === "/*" && $lastChar === '*' && $currChar ===
                         '/') || ($initialCommentChars === '//' && $currChar === "\n"))
                 {
-                    yield new Token($initialCommentChars === "/*" ? 'T_MULTILINE_COMMENT'
+                    $r = new \swl\core\Token($initialCommentChars === "/*" ? 'T_MULTILINE_COMMENT'
                                         : 'T_SINGLELINE_COMMENT', $sequence,
-                                    $line, $iniPos);
+                                             $line, $iniPos, $this->file);
+
+                    yield $r;
+
                     $sequence  = "";
                     $inComment = false;
 
@@ -128,13 +146,33 @@ class Lexer
             if (\preg_match('/^(reg)/', $sequence) && $nextChar !== '/' && $currChar ===
                     '/')
             {
-                if ($lastChar != '\\' && $currChar === '/')
+                if ($lastChar != '\\' && $currChar === '/' && $sequence != 'reg')
                 {
-                    yield new Token('T_REGEXP', $sequence, $line, $iniPos);
+                    $sequence .= $currChar;
+                    if ($nextChar === 'i')
+                    {
+                        $sequence .= $nextChar;
+                        $i++;
+                    }
+
+                    $finishingRegex = false;
+
+                    $r = new \swl\core\Token('T_REGEXP', $sequence, $line,
+                                             $iniPos, $this->file);
+
+                    yield $r;
+
                     $sequence = '';
                     continue;
                 }
 
+                $finishingRegex = false;
+
+                $sequence .= $currChar;
+                continue;
+            }
+            else if (\preg_match('/^(reg\/)/', $sequence))
+            {
                 $sequence .= $currChar;
                 continue;
             }
@@ -146,13 +184,16 @@ class Lexer
 
                     if ($token === false)
                     {
-                        throw new Exceptions\LexicalException("Unable to identify the current sequence.",
-                                                              $this->file,
-                                                              $line, $pos,
-                                                              $sequence);
+                        throw new LexicalException("Unable to identify the current sequence.",
+                                                   $this->file, $line, $pos,
+                                                   $sequence);
                     }
 
-                    yield new Token($token, $sequence, $line, $iniPos);
+                    $r = new \swl\core\Token($token, $sequence, $line, $iniPos,
+                                             $this->file);
+
+                    yield $r;
+
                     $sequence = '';
                 }
 
@@ -171,13 +212,16 @@ class Lexer
 
                     if ($token === false)
                     {
-                        throw new Exceptions\LexicalException("Unable to identify the current sequence.",
-                                                              $this->file,
-                                                              $line, $pos,
-                                                              $sequence);
+                        throw new LexicalException("Unable to identify the current sequence.",
+                                                   $this->file, $line, $pos,
+                                                   $sequence);
                     }
 
-                    yield new Token($token, $sequence, $line, $iniPos);
+                    $r = new \swl\core\Token($token, $sequence, $line, $iniPos,
+                                             $this->file);
+
+                    yield $r;
+
                     $sequence = '';
                 }
 
@@ -196,22 +240,31 @@ class Lexer
 
                     if ($token === false)
                     {
-                        throw new Exceptions\LexicalException("Unable to identify the current sequence.",
-                                                              $this->file,
-                                                              $line, $pos,
-                                                              $sequence);
+                        throw new LexicalException("Unable to identify the current sequence.",
+                                                   $this->file, $line, $pos,
+                                                   $sequence);
                     }
 
-                    yield new Token($token, $sequence, $line, $iniPos);
+                    $r = new \swl\core\Token($token, $sequence, $line, $iniPos,
+                                             $this->file);
+
+                    yield $r;
+
                     $sequence = '';
                 }
 
-                yield new Token('T_WHITESPACE', $currChar, $line, $pos);
-
-                if ($currChar === "\n")
+                if ($nextChar !== null)
                 {
-                    $pos = -1;
-                    $line++;
+                    $r = new \swl\core\Token('T_WHITESPACE', $currChar, $line,
+                                             $pos, $this->file);
+
+                    yield $r;
+
+                    if ($currChar === "\n")
+                    {
+                        $pos = -1;
+                        $line++;
+                    }
                 }
 
                 continue;
@@ -226,17 +279,24 @@ class Lexer
 
                     if ($token === false)
                     {
-                        throw new Exceptions\LexicalException("Unable to identify the current sequence.",
-                                                              $this->file,
-                                                              $line, $pos,
-                                                              $sequence);
+                        throw new LexicalException("Unable to identify the current sequence.",
+                                                   $this->file, $line, $pos,
+                                                   $sequence);
                     }
 
-                    yield new Token($token, $sequence, $line, $iniPos);
+                    $r = new \swl\core\Token($token, $sequence, $line, $iniPos,
+                                             $this->file);
+
+                    yield $r;
+
                     $sequence = '';
                 }
 
-                yield new Token($result, $currChar, $line, $pos);
+                $r = new \swl\core\Token($result, $currChar, $line, $pos,
+                                         $this->file);
+
+                yield $r;
+
                 continue;
             }
 
@@ -250,7 +310,7 @@ class Lexer
     {
         if (!$sequence) return 'T_WHITESPACE';
 
-        foreach (Tokens::$_terminals as $pattern => $name)
+        foreach (\swl\core\Tokens::$_terminals as $pattern => $name)
         {
             $matches = null;
             if (\preg_match_all($pattern, $sequence, $matches)) return $name;
@@ -263,13 +323,26 @@ class Lexer
     {
         if (!$char) return 'T_WHITESPACE';
 
-        foreach (Tokens::$_simpleTerminal as $pattern => $name)
+        foreach (\swl\core\Tokens::$_simpleTerminal as $pattern => $name)
         {
             $matches = null;
             if (\preg_match_all($pattern, $char, $matches)) return $name;
         }
 
         return false;
+    }
+
+    /**
+     * @param string $content
+     * @return \swl\core\Token[]
+     * @throws Exception
+     */
+    public static function &runString($content)
+    {
+        $d          = new self(null);
+        $d->content = $content;
+        $a          = &$d->analize();
+        return $a;
     }
 
 }

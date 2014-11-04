@@ -1,6 +1,6 @@
 <?php
 
-namespace swl\core\Exceptions;
+namespace swl\core\exceptions;
 
 /**
  * Description of FileNotFoundException

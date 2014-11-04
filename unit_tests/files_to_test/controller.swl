@@ -1,0 +1,7 @@
+controller Home {
+    action '/' -> index {
+        @view.exp = (2 ** 3) ** 8;
+        @view.reg = reg/^(.+)$/i;
+        @view.matched = @view.reg.isMatch('asd');
+    }
+}

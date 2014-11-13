@@ -40,7 +40,7 @@ class Loader
 
         $file = $newPath . '.php';
 
-	$pattern = '/^(\\)?(SebastianBergmann)/';
+	$pattern = '/^(\\\\)?(SebastianBergmann)/';
 
         if (!preg_match($pattern, $path) && (!\is_file($file) || \is_dir($file)) && \stripos($path, '\\') !== false)
         {

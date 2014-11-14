@@ -113,7 +113,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers LexerCombinations::GetTokensWithoutWhitespace
+     * @covers \swl\core\LexerCombinations::GetTokensWithoutWhitespaces
      */
     public function testSWLStringCodeAndCountTokens()
     {
@@ -138,8 +138,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers LexerCombinations::GetTokens
-     * @covers LexerCombinations::GetTokensWithoutWhitespace
+     * @covers \swl\core\LexerCombinations::GetTokens
+     * @covers \swl\core\LexerCombinations::GetTokensWithoutWhitespaces
      */
     public function testSWLControllerFileAndCountTokens()
     {

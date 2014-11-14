@@ -13,5 +13,6 @@ ini_set('include_path',
 define('APPPATH', 'tester');
 
 require_once __DIR__ . '/../swl/swl.php';
-
 define('INCPATH', __DIR__ . '/files_to_test/');
+require_once '/var/features/phpunit-runner-teamcity/phpunit-tc.php';
+

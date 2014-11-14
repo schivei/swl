@@ -74,8 +74,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @covers Lexer::run
-     * @covers Lexer::runString
+     * @covers \swl\core\Lexer::run
+     * @covers \swl\core\Lexer::runString
      */
     public function testAnalizeForFiveIdentifiersAndOneLeast()
     {

@@ -2,23 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/schivei/NetBeansProjects/swl/swl/core/LexerCombinations.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/swl/core/Token.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/swl/core/sintax/SintaxController.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/swl/core/StateRegister.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/unit_tests/bootstrap.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/unit_tests/configuration.xml</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/unit_tests/swl/core/LexerTest.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/swl/core/Tokens.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/unit_tests/files_to_test/controller.swl</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/unit_tests/swl/core/TokenTest.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/swl/core/collections/Linq.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/unit_tests/swl/core/TokensTest.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/swl/core/CompileLogger.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/swl/core/Lexer.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/swl/swl.php</file>
-            <file>file:/home/schivei/NetBeansProjects/swl/swl/core/Loader.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

@@ -31,6 +31,10 @@ class SintaxController implements \swl\core\sintax\ISintax
         $this->analize();
     }
 
+    /**
+     * @assert () == new SintaxException()
+     * @throws SintaxException
+     */
     private function analize()
     {
         $pos = 0;
@@ -51,12 +55,26 @@ class SintaxController implements \swl\core\sintax\ISintax
         }
     }
 
+    /**
+     * @assert () == []
+     * @return array
+     */
     public function getParsedFiles()
     {
         return [
             $this->filename => $this->prefiles['controller'],
             'routes'        => $this->prefiles['routes']
         ];
+    }
+
+    /**
+     * @assert () == ''
+     * @return string
+     */
+    public function getAParsedCommentedFile()
+    {
+        return "//{$this->filename}\n{$this->prefiles['controller']}\n\n\n"
+                . "//routes.php\n{$this->prefiles['routes']}";
     }
 
 }

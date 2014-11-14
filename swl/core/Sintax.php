@@ -109,8 +109,8 @@ class Sintax
                     break;
 
                 default:
-                    throw new SintaxException("Invalid initial Token in file.",
-                                              $tok);
+                    throw new SintaxException("Invalid initial Token in file. Expected: " .
+                    Tokens::ExceptInitialFiles(), $tok);
             }
         }
     }

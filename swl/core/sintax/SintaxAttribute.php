@@ -9,5 +9,15 @@ namespace swl\core\sintax;
  */
 class SintaxAttribute implements ISintax
 {
-//put your code here
+
+    public function getAParsedCommentedFile()
+    {
+
+    }
+
+    public function getParsedFiles()
+    {
+
+    }
+
 }

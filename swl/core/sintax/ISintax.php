@@ -2,6 +2,8 @@
 
 namespace swl\core\sintax;
 
+use \Iterator;
+
 /**
  *
  * @author schivei
@@ -9,5 +11,9 @@ namespace swl\core\sintax;
 interface ISintax
 {
 
+    function __construct(Iterator $tokens);
+
     function getParsedFiles();
+
+    function getAParsedCommentedFile();
 }

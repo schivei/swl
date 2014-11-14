@@ -1,5 +1,7 @@
 <?php
 
+namespace swl\core;
+
 /**
  * Description of View
  *
@@ -10,7 +12,7 @@ class View
 
     public function __construct()
     {
-        
+
     }
 
 }

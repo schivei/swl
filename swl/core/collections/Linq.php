@@ -4,20 +4,17 @@ namespace swl\core\collections;
 
 use \ArrayIterator,
     \InvalidArgumentException,
-    \Iterator;
+    \Iterator,
+    \swl\core\types\Object;
 
 /**
  * Description of Linq
  *
  * @author schivei
  */
-class Linq
+class Linq extends Object
 {
 
-    /**
-     * @var \ArrayIterator
-     */
-    private $from;
     private $count = -1;
 
     /**
@@ -26,19 +23,25 @@ class Linq
      */
     public function __construct(&$from)
     {
+        parent::__construct();
+
         if (!($from instanceof Iterator) && !\is_array($from))
                 throw new InvalidArgumentException("Expected an Iterator instance or array by argument.");
 
         $items = [];
 
-        foreach ($from as $key => &$value)
+        if ((is_array($from) && count($from) > 0) || ($from instanceof Iterator &&
+                $from->valid()))
         {
-            $items[$key] = $value;
+            foreach ($from as $key => &$value)
+            {
+                $items[$key] = $value;
+            }
         }
 
-        $this->from = new ArrayIterator($items);
+        $this->value = new ArrayIterator($items);
 
-        $this->count = $this->from->count();
+        $this->count = $this->value->count();
     }
 
     /**
@@ -47,7 +50,7 @@ class Linq
      */
     private function loop(callable $fn)
     {
-        foreach ($this->from as $key => &$curr)
+        foreach ($this->value as $key => &$curr)
         {
             if ($fn($curr, $key) === true) yield $curr;
         }
@@ -61,7 +64,7 @@ class Linq
         }
 
         $counter = &$this->loop($fn);
-        $from    = new Linq($counter);
+        $from    = new \swl\core\collections\Linq($counter);
 
         return $from->Count();
     }
@@ -79,13 +82,13 @@ class Linq
      */
     public function &GetIterator()
     {
-        return $this->from;
+        return $this->value;
     }
 
     public function &ToArray()
     {
         $items     = [];
-        foreach ($this->from as $k => &$item) $items[$k] = $item;
+        foreach ($this->value as $k => &$item) $items[$k] = $item;
 
         return $items;
     }

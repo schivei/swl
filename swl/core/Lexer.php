@@ -19,9 +19,10 @@ class Lexer
     private $file;
     private $content;
 
-    public function __construct($file)
+    public function __construct($file, $content = null)
     {
-        $this->file = $file;
+        $this->file    = $file;
+        $this->content = $content;
     }
 
     /**
@@ -339,9 +340,8 @@ class Lexer
      */
     public static function &runString($content)
     {
-        $d          = new self(null);
-        $d->content = $content;
-        $a          = &$d->analize();
+        $d = new self(null, $content);
+        $a = &$d->analize();
         return $a;
     }
 

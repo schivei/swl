@@ -151,4 +151,10 @@ final class Tokens
         return null;
     }
 
+    public static function ExceptInitialFiles()
+    {
+        return "controller, model, core, attribute, database, config, module, "
+                . "library or enum token.";
+    }
+
 }

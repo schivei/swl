@@ -131,6 +131,8 @@ class TokenTest extends PHPUnit_Framework_TestCase
      * Generated from @assert () == 'T_INVALID'.
      *
      * @covers swl\core\Token::unserialize
+     * @covers swl\core\Token::setPosition
+     * @covers swl\core\Token::getPosition
      */
     public function testUnserialize()
     {

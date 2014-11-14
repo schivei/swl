@@ -74,7 +74,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @covers Lexer::analize
+     * @covers Lexer::run
+     * @covers Lexer::runString
      */
     public function testAnalizeForFiveIdentifiersAndOneLeast()
     {
@@ -111,6 +112,9 @@ class LexerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @covers LexerCombinations::GetTokensWithoutWhitespace
+     */
     public function testSWLStringCodeAndCountTokens()
     {
         $content = "controller MyController {
@@ -133,6 +137,10 @@ class LexerTest extends \PHPUnit_Framework_TestCase
                            "Test a SWL Controller code combined.");
     }
 
+    /**
+     * @covers LexerCombinations::GetTokens
+     * @covers LexerCombinations::GetTokensWithoutWhitespace
+     */
     public function testSWLControllerFileAndCountTokens()
     {
         $from = &$this->lexFileInstances('controller.swl');

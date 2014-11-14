@@ -163,7 +163,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
     public function testTestException()
     {
         $this->setExpectedException(\InvalidArgumentException::class,
-                                    "The sequence is not a 'T_WHITESPACE' token.",
+                                    "The sequence is not a 'T_WHITESPACE::a' token.",
                                     0);
         $this->object->test('T_WHITESPACE', 'a');
     }

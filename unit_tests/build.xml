@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<delete dir="/var/www/swl/codecoverage"/>
-<exec executable="phpunit" failonerror="true">
-	<arg value="--coverage-html=/var/www/swl/codecoverage"/>
-	<arg value="--configuration"/>
-	<arg value="${basedir}/unit_tests/phpunit.xml"/>
-</exec>
-

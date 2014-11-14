@@ -40,11 +40,13 @@ class Loader
 
         $file = $newPath . '.php';
 
-	$pattern = '/^(\\\\)?(SebastianBergmann)/';
+        $pattern = '/^(\\\\)?(SebastianBergmann)/';
 
-        if (!preg_match($pattern, $path) && (!\is_file($file) || \is_dir($file)) && \stripos($path, '\\') !== false)
+        if (!preg_match($pattern, $path) && (!\is_file($file) || \is_dir($file)) &&
+                \stripos($path, '\\') !== false)
         {
-            throw new Exception("Não foi possível encontrar a definição de objeto '{$path}'");
+            //throw new Exception("Não foi possível encontrar a definição de objeto '{$path}'");
+            return;
         }
         else if (\stripos($path, '\\') !== false && !preg_match($pattern, $path))
         {

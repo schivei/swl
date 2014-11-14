@@ -33,9 +33,22 @@ class TokenTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Generated from @assert is_object(new Token()).
+     *
+     * @covers \swl\core\Token::__construct
+     * @covers \swl\core\Token::test
+     * @covers \swl\core\Tokens::GetPattern
+     */
+    public function test__constructor()
+    {
+        $this->object = new Token("T_IDENTIFIER", "non", 3, 21, "test.swl");
+        $this->assertTrue(\is_object($this->object));
+    }
+
+    /**
      * Generated from @assert () == 'T_INVALID'.
      *
-     * @covers swl\core\Token::getType
+     * @covers \swl\core\Token::getType
      */
     public function testGetType()
     {
@@ -47,7 +60,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
     /**
      * Generated from @assert () == 'T_INVALID'.
      *
-     * @covers swl\core\Token::getSequence
+     * @covers \swl\core\Token::getSequence
      */
     public function testGetSequence()
     {
@@ -59,7 +72,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
     /**
      * Generated from @assert () == 'T_INVALID'.
      *
-     * @covers swl\core\Token::getLine
+     * @covers \swl\core\Token::getLine
      */
     public function testGetLine()
     {
@@ -71,7 +84,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
     /**
      * Generated from @assert () == 'T_INVALID'.
      *
-     * @covers swl\core\Token::getPosition
+     * @covers \swl\core\Token::getPosition
      */
     public
             function testGetPosition()
@@ -84,7 +97,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
     /**
      * Generated from @assert () == 'T_INVALID'.
      *
-     * @covers swl\core\Token::setPosition
+     * @covers \swl\core\Token::setPosition
      */
     public function
 
@@ -102,7 +115,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
     /**
      * Generated from @assert () == 'T_INVALID'.
      *
-     * @covers swl\core\Token::getFile
+     * @covers \swl\core\Token::getFile
      */
     public function testGetFile()
     {
@@ -114,7 +127,7 @@ class TokenTest extends PHPUnit_Framework_TestCase
     /**
      * Generated from @assert () == 'T_INVALID'.
      *
-     * @covers swl\core\Token::serialize
+     * @covers \swl\core\Token::serialize
      */
     public function testSerialize()
     {
@@ -130,9 +143,9 @@ class TokenTest extends PHPUnit_Framework_TestCase
     /**
      * Generated from @assert () == 'T_INVALID'.
      *
-     * @covers swl\core\Token::unserialize
-     * @covers swl\core\Token::setPosition
-     * @covers swl\core\Token::getPosition
+     * @covers \swl\core\Token::unserialize
+     * @covers \swl\core\Token::setPosition
+     * @covers \swl\core\Token::getPosition
      */
     public function testUnserialize()
     {
@@ -150,7 +163,8 @@ class TokenTest extends PHPUnit_Framework_TestCase
     /**
      * Generated from @assert (0, 0) == true.
      *
-     * @covers swl\core\Token::test
+     * @covers \swl\core\Token::test
+     * @covers \swl\core\Tokens::GetPattern
      */
     public function testTest()
     {
@@ -160,7 +174,8 @@ class TokenTest extends PHPUnit_Framework_TestCase
     /**
      * Generated from @assert (0, 0) == true.
      *
-     * @covers swl\core\Token::test
+     * @covers \swl\core\Token::test
+     * @covers \swl\core\Tokens::GetPattern
      */
     public function testTestException()
     {
@@ -173,7 +188,8 @@ class TokenTest extends PHPUnit_Framework_TestCase
     /**
      * Generated from @assert (0, 0) == true.
      *
-     * @covers swl\core\Token::test
+     * @covers \swl\core\Token::test
+     * @covers \swl\core\Tokens::GetPattern
      */
     public function testTestException2()
     {

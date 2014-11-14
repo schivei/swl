@@ -74,8 +74,16 @@ class LexerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @covers \swl\core\Lexer::run
      * @covers \swl\core\Lexer::runString
+     * @covers \swl\core\Lexer::__construct
+     * @covers \swl\core\Lexer::analize
+     * @covers \swl\core\Token::__construct
+     * @covers \swl\core\Token::test
+     * @covers \swl\core\Token::GetPattern
+     * @covers \swl\core\Lexer::_pairChar
+     * @covers \swl\core\Lexer::_match
+     * @covers \swl\core\Lexer::serialize
+     * @covers \swl\core\Lexer::unserialize
      */
     public function testAnalizeForFiveIdentifiersAndOneLeast()
     {
@@ -113,6 +121,13 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \swl\core\Lexer::runString
+     * @covers \swl\core\Token::__construct
+     * @covers \swl\core\Lexer::analize
+     * @covers \swl\core\Token::test
+     * @covers \swl\core\Token::GetPattern
+     * @covers \swl\core\Lexer::_pairChar
+     * @covers \swl\core\Lexer::_match
      * @covers \swl\core\LexerCombinations::GetTokensWithoutWhitespaces
      */
     public function testSWLStringCodeAndCountTokens()
@@ -138,6 +153,13 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \swl\core\Lexer::run
+     * @covers \swl\core\Token::__construct
+     * @covers \swl\core\Lexer::analize
+     * @covers \swl\core\Token::test
+     * @covers \swl\core\Token::GetPattern
+     * @covers \swl\core\Lexer::_pairChar
+     * @covers \swl\core\Lexer::_match
      * @covers \swl\core\LexerCombinations::GetTokens
      * @covers \swl\core\LexerCombinations::GetTokensWithoutWhitespaces
      */

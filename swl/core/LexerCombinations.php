@@ -2,8 +2,6 @@
 
 namespace swl\core;
 
-use \swl\core\collections\Linq;
-
 /**
  * Description of LexerCombinations
  *

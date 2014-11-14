@@ -44,6 +44,9 @@ class TokensTest extends \PHPUnit_Framework_TestCase
      * Generated from @assert ("::", 1, 0) == new Token("T_STATIC_CALL", "::", 1, 0).
      *
      * @covers \swl\core\Tokens::DoubleAnalize
+     * @covers \swl\core\Token::__construct
+     * @covers \swl\core\Token::test
+     * @covers \swl\core\Tokens::GetPattern
      */
     public function testDoubleAnalize2()
     {

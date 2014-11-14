@@ -9,6 +9,7 @@
 </phpunit-->
 
 <phpunit colors="true"
+	 bootstrap="bootstrap.php"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"/>

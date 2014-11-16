@@ -133,10 +133,10 @@ header {
   top: 51px;
 }
 
-header span.ribbon-inner {
+header .ribbon-inner {
   position: relative;
   display: block;
-  background-color: #cd596b;
+  background-color: darkorange;
   border: 8px solid #7c334f;
   padding: 6px;
   z-index: 1;
@@ -225,13 +225,13 @@ footer {
   text-align: center;
 }
 
-footer span.ribbon-outer {
+footer .ribbon-outer {
   display: block;
   position: relative;
   border-bottom: 2px solid #bdb6ad;
 }
 
-footer span.ribbon-inner {
+footer .ribbon-inner {
   position: relative;
   display: block;
   background-color: #cd596b;
@@ -251,7 +251,7 @@ footer a {
   color: #cd596b;
 }
 
-footer span.ribbon-inner p {
+footer .ribbon-inner p {
   background-color: #7c334f;
   margin: 0;
   color: #e69b95;
@@ -261,7 +261,7 @@ footer span.ribbon-inner p {
   padding: 20px 0px 10px;
 }
 
-footer span.ribbon-inner a {
+footer .ribbon-inner a {
   display: block;
   position: relative;
   bottom: 0;
@@ -274,7 +274,7 @@ footer span.ribbon-inner a {
   padding-bottom: 10px;
 }
 
-footer span.ribbon-inner a:hover {
+footer .ribbon-inner a:hover {
   color: #7eb0d2;
 }
 

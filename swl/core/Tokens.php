@@ -118,10 +118,16 @@ final class Tokens
     public static function DoubleAnalize($sequence, $line, $initialPosition,
                                          $file)
     {
-        foreach (static::$_specialTerminals as $pattern => $token)
-                if (preg_match($pattern, $sequence))
-                    return new Token($token, $sequence, $line, $initialPosition,
-                                     $file);
+
+        $filtered = \array_filter(\array_keys(static::$_specialTerminals),
+                                              function($pattern) use ($sequence)
+        {
+            return !!\preg_match($pattern, $sequence);
+        });
+
+        if (\count($filtered) > 0)
+                return new Token(static::$_specialTerminals[$filtered[0]],
+                                 $sequence, $line, $initialPosition, $file);
 
         return null;
     }
@@ -142,14 +148,14 @@ final class Tokens
      */
     public static function GetPattern($token)
     {
-        foreach (self::$_simpleTerminal as $key => $value)
-                if ($value === $token) return $key;
+        if (\in_array($token, self::$_simpleTerminal))
+                return \array_keys(self::$_simpleTerminal, $token)[0];
 
-        foreach (self::$_specialTerminals as $key => $value)
-                if ($value === $token) return $key;
+        if (\in_array($token, self::$_specialTerminals))
+                return \array_keys(self::$_specialTerminals, $token)[0];
 
-        foreach (self::$_terminals as $key => $value)
-                if ($value === $token) return $key;
+        if (\in_array($token, self::$_terminals))
+                return \array_keys(self::$_terminals, $token)[0];
 
         return null;
     }

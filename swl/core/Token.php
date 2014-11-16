@@ -91,7 +91,7 @@ class Token implements Serializable
      */
     public function serialize()
     {
-        return serialize([
+        return \serialize([
             'token'           => $this->token,
             'sequence'        => $this->sequence,
             'line'            => $this->line,
@@ -105,8 +105,8 @@ class Token implements Serializable
      */
     public function unserialize($serialized)
     {
-        $u                     = unserialize($serialized);
-        $unserialized          = !is_object($u) ? (object) $u : $u;
+        $u                     = \unserialize($serialized);
+        $unserialized          = !\is_object($u) ? (object) $u : $u;
         $this->token           = $unserialized->token;
         $this->sequence        = $unserialized->sequence;
         $this->line            = $unserialized->line;
@@ -121,9 +121,9 @@ class Token implements Serializable
      */
     public function test($token, $sequence)
     {
-        $tok = in_array($token, \swl\core\Tokens::$_simpleTerminal)
-                || in_array($token, \swl\core\Tokens::$_specialTerminals)
-                || in_array($token, \swl\core\Tokens::$_terminals);
+        $tok = \in_array($token, \swl\core\Tokens::$_simpleTerminal)
+                || \in_array($token, \swl\core\Tokens::$_specialTerminals)
+                || \in_array($token, \swl\core\Tokens::$_terminals);
 
         if (!$tok)
                 throw new InvalidArgumentException("The token '{$token}' is invalid.");
@@ -133,7 +133,7 @@ class Token implements Serializable
         if (null === $pattern)
                 throw new InvalidArgumentException("The sequence is not a '{$token}' token.");
 
-        if (!preg_match($pattern, $sequence))
+        if (!\preg_match($pattern, $sequence))
                 throw new InvalidArgumentException("The sequence is not a '{$token}::{$sequence}' token.");
 
         return true;

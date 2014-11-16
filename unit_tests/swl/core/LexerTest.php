@@ -82,8 +82,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
      * @covers \swl\core\Tokens::GetPattern
      * @covers \swl\core\Lexer::_pairChar
      * @covers \swl\core\Lexer::_match
-     * @covers \swl\core\Lexer::serialize
-     * @covers \swl\core\Lexer::unserialize
+     * @covers \swl\core\Token::serialize
+     * @covers \swl\core\Token::unserialize
      */
     public function testAnalizeForFiveIdentifiersAndOneLeast()
     {

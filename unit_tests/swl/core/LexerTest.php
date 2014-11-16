@@ -79,7 +79,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
      * @covers \swl\core\Lexer::analize
      * @covers \swl\core\Token::__construct
      * @covers \swl\core\Token::test
-     * @covers \swl\core\Token::GetPattern
+     * @covers \swl\core\Tokens::GetPattern
      * @covers \swl\core\Lexer::_pairChar
      * @covers \swl\core\Lexer::_match
      * @covers \swl\core\Lexer::serialize
@@ -125,7 +125,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
      * @covers \swl\core\Token::__construct
      * @covers \swl\core\Lexer::analize
      * @covers \swl\core\Token::test
-     * @covers \swl\core\Token::GetPattern
+     * @covers \swl\core\Tokens::GetPattern
      * @covers \swl\core\Lexer::_pairChar
      * @covers \swl\core\Lexer::_match
      * @covers \swl\core\LexerCombinations::GetTokensWithoutWhitespaces
@@ -157,7 +157,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
      * @covers \swl\core\Token::__construct
      * @covers \swl\core\Lexer::analize
      * @covers \swl\core\Token::test
-     * @covers \swl\core\Token::GetPattern
+     * @covers \swl\core\Tokens::GetPattern
      * @covers \swl\core\Lexer::_pairChar
      * @covers \swl\core\Lexer::_match
      * @covers \swl\core\LexerCombinations::GetTokens

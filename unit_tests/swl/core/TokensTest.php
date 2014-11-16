@@ -109,4 +109,15 @@ class TokensTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Generated from @asser () == 'controller, model, core, attribute, database, config, module, library or enum token.'
+     *
+     * @covers \swl\core\Tokens::ExceptInitialFiles
+     */
+    public function testExceptInitialFiles()
+    {
+        $expected = "controller, model, core, attribute, database, config, module, library or enum token.";
+        $this->assertEquals($expected, Tokens::ExceptInitialFiles());
+    }
+
 }

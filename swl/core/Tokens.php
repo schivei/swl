@@ -126,6 +126,9 @@ final class Tokens
         return null;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     private function __construct()
     {
 

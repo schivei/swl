@@ -125,9 +125,14 @@ final class Tokens
             return !!\preg_match($pattern, $sequence);
         });
 
+
+
         if (\count($filtered) > 0)
-                return new Token(static::$_specialTerminals[$filtered[0]],
-                                 $sequence, $line, $initialPosition, $file);
+                return new Token(static::$_specialTerminals[\current($filtered)],
+                                                                     $sequence,
+                                                                     $line,
+                                                                     $initialPosition,
+                                                                     $file);
 
         return null;
     }
@@ -148,16 +153,15 @@ final class Tokens
      */
     public static function GetPattern($token)
     {
+        $keys = [null];
         if (\in_array($token, self::$_simpleTerminal))
-                return \array_keys(self::$_simpleTerminal, $token)[0];
+                $keys = \array_keys(self::$_simpleTerminal, $token);
+        else if (\in_array($token, self::$_specialTerminals))
+                $keys = \array_keys(self::$_specialTerminals, $token);
+        else if (\in_array($token, self::$_terminals))
+                $keys = \array_keys(self::$_terminals, $token);
 
-        if (\in_array($token, self::$_specialTerminals))
-                return \array_keys(self::$_specialTerminals, $token)[0];
-
-        if (\in_array($token, self::$_terminals))
-                return \array_keys(self::$_terminals, $token)[0];
-
-        return null;
+        return current($keys);
     }
 
     public static function ExceptInitialFiles()

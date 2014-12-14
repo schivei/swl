@@ -2,8 +2,9 @@
 
 namespace swl\core\sintax;
 
-use \Iterator,
-    \swl\core\exceptions\SintaxException,
+use \swl\core\exceptions\SintaxException,
+    \swl\core\LexerCombinations,
+    \swl\core\sintax\ISintax,
     \swl\core\Token;
 
 /**
@@ -11,48 +12,49 @@ use \Iterator,
  *
  * @author schivei
  */
-class SintaxController implements \swl\core\sintax\ISintax
+class SintaxController implements ISintax
 {
 
     /**
-     * @var Iterator
+     * @var LexerCombinations
      */
-    private $tokens;
+    private $lex;
     private $prefiles = [];
     private $filename = '';
 
-    public function __construct(Iterator $tokens)
-    {
-        $this->tokens = $tokens;
+    /**
+     * @var Token
+     */
+    private $name;
 
-        $this->prefiles['controller'] = '';
-        $this->prefiles['routes']     = '';
+    /**
+     * @var Token
+     */
+    private $extends;
+
+    /**
+     * @var SintaxAction[]
+     */
+    private $actions;
+
+    public function __construct(LexerCombinations $lex)
+    {
+        $this->lex = $lex;
 
         $this->analize();
     }
 
     /**
+     * @return void
      * @assert () == new SintaxException()
      * @throws SintaxException
      */
-    private function analize()
+    public function analize()
     {
-        $pos = 0;
-        /* @var $token Token */
-        foreach ($this->tokens as $token)
-        {
-            if ($token->getType())
-            {
-                $this->filename = $token->getFile();
-                continue;
-            }
-
-            if ($pos === 0)
-            {
-                if ($token->getType() !== 'T_IDENTIFIER')
-                        throw new SintaxException("", $token);
-            }
-        }
+        $this->compileEssentials();
+        $this->compileMembers();
+        $this->compileEvents();
+        $this->compileActions();
     }
 
     /**
@@ -75,6 +77,77 @@ class SintaxController implements \swl\core\sintax\ISintax
     {
         return "//{$this->filename}\n{$this->prefiles['controller']}\n\n\n"
                 . "//routes.php\n{$this->prefiles['routes']}";
+    }
+
+    private function compileEssentials()
+    {
+        $tokens = &$this->lex->GetTokens();
+
+        /* @var $last Token */
+        $last = null;
+
+        $cont = null;
+        $dob  = null;
+
+        /* @var $token Token */
+        foreach ($tokens as $token)
+        {
+            $valid = $token->getType() === 'T_IDENTIFIER' && !is_null($last);
+            if (\is_null($this->name) && $valid && $last->getType() === 'T_CONTROLLER')
+            {
+                $this->name = $token;
+            }
+            else if (\is_null($this->extends) && $valid && $last->getType() === 'T_DOUBLECOMMA')
+            {
+                $this->extends = $token;
+            }
+            else if ($token->getType() === 'T_CONTROLLER')
+            {
+                $cont = $token;
+            }
+            else if ($token->getType() === 'T_DOUBLECOMMA')
+            {
+                $dob = $token;
+            }
+
+            $last = $token;
+        }
+
+        if (\is_null($this->name))
+                throw new SintaxException("The declared controller dont has a identifier.",
+                                          $cont);
+
+        if (\is_null($this->extends))
+        {
+            if (!\is_null($dob))
+                    throw new SintaxException("The declared controller dont has a extends identifier.",
+                                              $dob);
+
+            $this->extends = new Token("T_IDENTIFIER", "\silly\core\Controller",
+                                       $this->name->getLine(),
+                                       $this->name->getPosition() + 3,
+                                       $cont->getFile());
+        }
+    }
+
+    private function compileMembers()
+    {
+
+    }
+
+    private function compileEvents()
+    {
+
+    }
+
+    private function compileActions()
+    {
+
+    }
+
+    public function checkOpenCloseStatements()
+    {
+
     }
 
 }

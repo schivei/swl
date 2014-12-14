@@ -28,13 +28,13 @@ namespace swl
 
         Loader::init();
 
-        if (isset($argv))
+        if (isset($argv) && !\defined('APPPATH'))
         {
             management\cli\Program::Main($argc - 1, ...$argv);
         }
         else
         {
-            if (!defined('APPPATH'))
+            if (!\defined('APPPATH'))
             {
                 throw new \Exception("An error has occurred during application calls.\nCheck your primary code.\n");
             }
@@ -46,8 +46,8 @@ namespace swl
     }
     catch (\Exception $e)
     {
-        header("HTTP/1.1 500 Internal Server Error");
-        header("Content-Type: text/plain");
+        \header("HTTP/1.1 500 Internal Server Error");
+        \header("Content-Type: text/plain");
         if (Console::IsCLI())
                 Console::ColorWriteLine($e->getMessage(), Colors::FG_RED);
         else echo $e->getMessage();

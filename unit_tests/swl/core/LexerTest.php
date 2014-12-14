@@ -1,6 +1,7 @@
 <?php
 
 use \swl\core\collections\Linq,
+    \swl\core\exceptions\InvalidFileException,
     \swl\core\Lexer,
     \swl\core\LexerCombinations,
     \swl\core\Token;
@@ -45,17 +46,18 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     private function &lexInstances($str)
     {
         $instances = &Lexer::runString($str);
-        $this->assertInstanceOf(\Generator::class, $instances,
-                                'Test if Lexer return a Generator instance.');
-        $linq      = new Linq($instances);
+        $this->assertTrue(\is_array($instances),
+                                    'Test if Lexer return a Generator instance.');
+
+        $linq = new Linq($instances);
         return $linq;
     }
 
     private function &lexFileInstances($file)
     {
         $instances = &Lexer::run(\INCPATH . $file);
-        $this->assertInstanceOf(\Generator::class, $instances,
-                                'Test if Lexer file return a Generator instance.');
+        $this->assertTrue(\is_array($instances),
+                                    'Test if Lexer file return a Generator instance.');
         $linq      = new Linq($instances);
         return $linq;
     }
@@ -63,12 +65,6 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     private function &lexInstance(Linq &$from)
     {
         $stack = &$from->First();
-        return $stack;
-    }
-
-    private function &lexLastInstance(Linq &$from)
-    {
-        $stack = &$from->Last();
         return $stack;
     }
 
@@ -98,25 +94,18 @@ class LexerTest extends \PHPUnit_Framework_TestCase
             /* @var $instance Token */
             $instance = &$this->lexInstance($from);
 
-            /* @var $linstance Token */
-            $linstance = &$this->lexLastInstance($from);
-
             $arr = $from->ToArray();
 
             $this->assertInstanceOf(Linq::class, $from,
                                     'Test the if token iterator is a Linq class.');
-            $this->assertCount(1, $arr, 'Test the number of tokens.');
-            $this->assertEquals($instance, $linstance,
-                                'Test the last token are equals first the token.');
+
+            $this->assertCount(2, $arr, 'Test the number of tokens.');
+
             $this->assertInstanceOf("\swl\core\Token", $instance,
-                                    'Test the last token type.');
-            $this->assertInstanceOf("\swl\core\Token", $linstance,
                                     'Test the last token type.');
 
             $this->assertEquals($expected, serialize($instance),
                                                      'Test the first token content.');
-            $this->assertEquals($expected, serialize($linstance),
-                                                     'Test the last token content.');
         }
     }
 
@@ -128,7 +117,6 @@ class LexerTest extends \PHPUnit_Framework_TestCase
      * @covers \swl\core\Tokens::GetPattern
      * @covers \swl\core\Lexer::_pairChar
      * @covers \swl\core\Lexer::_match
-     * @covers \swl\core\LexerCombinations::GetTokensWithoutWhitespaces
      */
     public function testSWLStringCodeAndCountTokens()
     {
@@ -140,16 +128,36 @@ class LexerTest extends \PHPUnit_Framework_TestCase
 
         $from = &$this->lexInstances($content);
 
-        $this->assertCount(46, $from->ToArray(), "Test a SWL Controller code.");
+        $this->assertCount(75, $from->ToArray(), "Test a SWL Controller code.");
+    }
 
-        $comb = new LexerCombinations(new Lexer(null, $content));
+    /**
+     * @covers \swl\core\Lexer::run
+     * @covers \swl\core\Token::__construct
+     * @covers \swl\core\Lexer::__construct
+     * @covers \swl\core\Lexer::analize
+     * @covers \swl\core\Token::test
+     * @covers \swl\core\Tokens::GetPattern
+     * @covers \swl\core\Lexer::_pairChar
+     * @covers \swl\core\Lexer::_match
+     * @covers \swl\core\LexerCombinations::__construct
+     * @covers \swl\core\LexerCombinations::GetTokens
+     * @covers \swl\core\LexerCombinations::analize
+     */
+    public function testSWLControllerFileAndCountTokens()
+    {
+        $from = &$this->lexFileInstances('controller.swl');
 
-        $ntokens = $comb->GetTokensWithoutWhitespaces();
+        $arr = $from->ToArray();
 
-        $from = new Linq($ntokens);
+        $this->assertCount(161, $arr, "Test a SWL file Controller code.");
 
-        $this->assertCount(17, $from->ToArray(),
-                           "Test a SWL Controller code combined.");
+        $comb = new LexerCombinations(new Lexer(new \SplFileObject(\INCPATH . 'controller.swl')));
+
+        $tokens = $comb->GetTokens();
+
+        $this->assertArrayHasKey(0, $tokens,
+                                 'Test if Lexer Combinations return a Generator instance.');
     }
 
     /**
@@ -161,38 +169,37 @@ class LexerTest extends \PHPUnit_Framework_TestCase
      * @covers \swl\core\Lexer::_pairChar
      * @covers \swl\core\Lexer::_match
      * @covers \swl\core\LexerCombinations::GetTokens
-     * @covers \swl\core\LexerCombinations::GetTokensWithoutWhitespaces
+     * @covers \swl\core\LexerCombinations::analize
      */
-    public function testSWLControllerFileAndCountTokens()
+    public function testAnalizerEmptyFileAndContent()
     {
-        $from = &$this->lexFileInstances('controller.swl');
+        $this->setExpectedException(\BadMethodCallException::class,
+                                    "Please, enter the file source code.");
 
-        $arr = $from->ToArray();
+        $lex = new Lexer(null, null);
 
-        $this->assertCount(102, $arr, "Test a SWL file Controller code.");
+        $lex->analize();
+    }
 
-        $comb = new LexerCombinations(new Lexer(\INCPATH . 'controller.swl'));
+    /**
+     * @covers \swl\core\Lexer::run
+     * @covers \swl\core\Token::__construct
+     * @covers \swl\core\Lexer::analize
+     * @covers \swl\core\Token::test
+     * @covers \swl\core\Tokens::GetPattern
+     * @covers \swl\core\Lexer::_pairChar
+     * @covers \swl\core\Lexer::_match
+     * @covers \swl\core\LexerCombinations::GetTokens
+     * @covers \swl\core\LexerCombinations::analize
+     */
+    public function testAnalizerinvalidFile()
+    {
+        $this->setExpectedException(InvalidFileException::class,
+                                    "The file is not a SWL source code.");
 
-        $tokens  = $comb->GetTokens();
-        $ntokens = $comb->GetTokensWithoutWhitespaces();
+        $lex = new Lexer(new \SplFileObject(__FILE__), null);
 
-        $this->assertInstanceOf(\Generator::class, $tokens,
-                                'Test if Lexer Combinations return a Generator instance.');
-
-        $this->assertInstanceOf(\Generator::class, $ntokens,
-                                'Test if Lexer Combinations return a Generator instance.');
-
-        $linq  = new Linq($tokens);
-        $nlinq = new Linq($ntokens);
-
-        $arr  = $linq->ToArray();
-        $narr = $nlinq->ToArray();
-
-        $this->assertCount(99, $arr,
-                           "Test a SWL file Controller code combinated.");
-
-        $this->assertCount(45, $narr,
-                           "Test a SWL file Controller code combinated.");
+        $lex->analize();
     }
 
 }

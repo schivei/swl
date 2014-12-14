@@ -20,4 +20,19 @@ class SintaxAttribute implements ISintax
 
     }
 
+    public function __construct(\swl\core\LexerCombinations $lex)
+    {
+
+    }
+
+    public function analize()
+    {
+
+    }
+
+    public function checkOpenCloseStatements()
+    {
+
+    }
+
 }

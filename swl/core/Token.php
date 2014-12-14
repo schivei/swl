@@ -126,17 +126,31 @@ class Token implements Serializable
                 || \in_array($token, \swl\core\Tokens::$_terminals);
 
         if (!$tok)
-                throw new InvalidArgumentException("The token '{$token}' is invalid.");
+        {
+            throw new InvalidArgumentException("The token '{$token}' is invalid.");
+        }
 
         $pattern = \swl\core\Tokens::GetPattern($token);
 
         if (null === $pattern)
                 throw new InvalidArgumentException("The sequence is not a '{$token}' token.");
 
-        if (!\preg_match($pattern, $sequence))
+        if (!\preg_match($pattern,
+                         str_replace("\n", " ",
+                                     str_replace("\r", " ", $sequence))))
                 throw new InvalidArgumentException("The sequence is not a '{$token}::{$sequence}' token.");
 
         return true;
+    }
+
+    public function isComment()
+    {
+        return $this->token === 'T_MULINE_COMMENT' || $this->token === 'T_SINGLEINE_COMMENT';
+    }
+
+    public function isWhitespace()
+    {
+        return $this->token === 'T_WHITESPACE';
     }
 
 }

@@ -30,10 +30,10 @@ class Linq extends Object
 
         $items = [];
 
-        if ((is_array($from) && count($from) > 0) || ($from instanceof Iterator &&
+        if ((\is_array($from) && \count($from) > 0) || ($from instanceof Iterator &&
                 $from->valid()))
         {
-            foreach ($from as $key => &$value)
+            foreach ($from as $key => $value)
             {
                 $items[$key] = $value;
             }
@@ -48,7 +48,7 @@ class Linq extends Object
      * @param \swl\core\collections\callable $fn
      * @return Iterator
      */
-    private function loop(callable $fn)
+    private function &loop(callable $fn)
     {
         foreach ($this->value as $key => &$curr)
         {

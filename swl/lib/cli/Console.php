@@ -8,7 +8,7 @@
 
 namespace swl\lib\cli;
 
-\define("EOL", \preg_match('/(win)/i', \PHP_OS) ? "\r\n" : "\n");
+\define("\EOL", \preg_match('/(win)/i', \PHP_OS) ? "\r\n" : "\n");
 
 /**
  * Description of Console

@@ -2,7 +2,7 @@
 
 namespace swl\core\sintax;
 
-use \Iterator;
+use \swl\core\LexerCombinations;
 
 /**
  *
@@ -11,9 +11,13 @@ use \Iterator;
 interface ISintax
 {
 
-    function __construct(Iterator $tokens);
+    function __construct(LexerCombinations $lex);
+
+    function analize();
 
     function getParsedFiles();
 
     function getAParsedCommentedFile();
+
+    function checkOpenCloseStatements();
 }

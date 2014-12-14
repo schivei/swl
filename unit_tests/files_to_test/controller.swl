@@ -1,7 +1,10 @@
+/**
+ * Test Comment
+ */
 controller Home {
     action '/' -> index {
         @view.exp = (2 ** 3) ** 8;
-        @view.reg = reg/^(.+)$/i;
+        @view.reg = reg/^(.+)$/i; //test
         @view.matched = @view.reg.isMatch('asd');
     }
 }

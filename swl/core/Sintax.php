@@ -6,8 +6,6 @@ use \Generator,
     \Generator,
     \Iterator,
     \Iterator,
-    \swl\core\collections\Linq,
-    \swl\core\collections\Linq,
     \swl\core\exceptions\SintaxException,
     \swl\core\exceptions\SintaxException,
     \swl\core\sintax\SintaxAttribute,
@@ -40,6 +38,11 @@ class Sintax
      */
     private $lexers;
 
+    /**
+     * @var sintax\ISintax[]
+     */
+    private $analisis;
+
     public function __construct(Generator $lexers)
     {
         $this->lexers = $lexers;
@@ -47,7 +50,7 @@ class Sintax
 
     public function run()
     {
-        $analizers = $this->analize();
+        $this->analisis = $this->analize();
     }
 
     /**
@@ -57,91 +60,74 @@ class Sintax
     {
         foreach ($this->lexers as $lexer)
         {
-            /* @var $tokens Token[] */
-            $tokens = $lexer->analize();
+            $lex = new \swl\core\LexerCombinations($lexer);
 
-            $from   = new Linq($tokens);
-            $tokens = $from->Where(function (Token $tok)
-                    {
-                        return $tok->getType() !== 'T_WHITESPACE' && $tok->getType() !==
-                                'T_MULINE_COMMENT' && $tok->getType() !== 'T_SINGLEINE_COMMENT';
-                    })->GetIterator();
+            /* @var $tokens Token[] */
+            $tokens = $lex->GetTokens();
 
             /* @var $tok Token */
-            $tok = $tokens->current();
+            $token = null;
 
-            switch ($tok->getType())
+            foreach ($tokens as $tok)
             {
-                case 'T_CONTROLLER':
-                    yield new SintaxController($tokens);
-                    break;
+                switch ($tok->getType())
+                {
+                    case 'T_CONTROLLER':
+                        $token = new SintaxController($lex);
+                        break;
 
-                case 'T_DATABASE':
-                    yield new SintaxDatabase($tokens);
-                    break;
+                    case 'T_DATABASE':
+                        $token = new SintaxDatabase($lex);
+                        break;
 
-                case 'T_MODEL':
-                    yield new SintaxModel($tokens);
-                    break;
+                    case 'T_MODEL':
+                        $token = new SintaxModel($lex);
+                        break;
 
-                case 'T_ATTRIBUTE':
-                    yield new SintaxAttribute($tokens);
-                    break;
+                    case 'T_ATTRIBUTE':
+                        $token = new SintaxAttribute($lex);
+                        break;
 
-                case 'T_CONFIG':
-                    yield new SintaxConfiguration($tokens);
-                    break;
+                    case 'T_CONFIG':
+                        $token = new SintaxConfiguration($lex);
+                        break;
 
-                case 'T_ENUM':
-                    yield new SintaxEnum($tokens);
-                    break;
+                    case 'T_ENUM':
+                        $token = new SintaxEnum($lex);
+                        break;
 
-                case 'T_LIBRARY':
-                    yield new SintaxLibrary($tokens);
-                    break;
+                    case 'T_LIBRARY':
+                        $token = new SintaxLibrary($lex);
+                        break;
 
-                case 'T_MODULE':
-                    yield new SintaxModule($tokens);
-                    break;
+                    case 'T_MODULE':
+                        $token = new SintaxModule($lex);
+                        break;
 
-                case 'T_CORE_REWRITE':
-                    yield new SintaxCoreRewrite($tokens);
-                    break;
+                    case 'T_CORE_REWRITE':
+                        $token = new SintaxCoreRewrite($lex);
+                        break;
+                }
 
-                default:
-                    throw new SintaxException("Invalid initial Token in file. Expected: " .
-                    Tokens::ExceptInitialFiles(), $tok);
+                if ($tok->isComment() || $tok->isWhitespace())
+                {
+                    $token = null;
+                    continue;
+                }
+                else if (\is_null($token))
+                {
+                    $token = null;
+                    break;
+                }
+            }
+
+            if (\is_null($token))
+            {
+                throw new SintaxException(
+                "Invalid initial Token in file. Expected: " .
+                \swl\core\Tokens::ExceptInitialFiles(), $tok);
             }
         }
     }
 
 }
-
-/**
-ROOT := <T_CONTROLLER> <T_WHITESPACE>+ <T_IDENTIFIER>
-       (<T_WHITESPACE>* <T_DOUBLECOMMA> <T_WHITESPACE>* <T_IDENTIFIER>)?
-       <T_WHITESPACE>* <T_OPEN_BLOCK> (<CONTROLLER_STMT>*|<T_WHITESPACE>*) <T_CLOSE_BLOCK>
-
-SOME_METHODS_STMT :=
-
-CNTRL_ATT_STMT := <T_OPEN_ARRAY> <T_WHITESPACE>*
-                <T_WHITESPACE>* <T_IDENTIFIER> <T_WHITESPACE>*
-                (, <T_WHITESPACE>* <T_IDENTIFIER> <T_WHITESPACE>*)*
-                <T_WHITESPACE>* <T_CLOSE_ARRAY>
-
-SOME_STRING := (<T_UNESCAPED_STRING>|<T_ESCAPED_STRING>)
-
-ACTION_STMT := <T_WHITESPACE>* <T_ACTION>  <T_WHITESPACE>* <SOME_STRING>? <T_COMMAND_RUN_SEP>
-            <T_IDENTIFIER> <T_WHITESPACE>* <T_OPEN_BLOCK> (<T_WHITESPACE>*|<SOME_METHODS_STMT>*)
-            <T_CLOSE_BLOCK>
-
-CONTROLLER_STMT := <T_WHITESPACE>*
-                  (<T_OPEN_ARRAY> <T_WHITESPACE>* <CNTRL_ATT_STMT> <T_WHITESPACE>*
-                    <T_CLOSE_ARRAY> <T_WHITESPACE>*)* <T_WHITESPACE>*
-                  <ACTION_STMT>
-
-
- *  *
- *
-
- */

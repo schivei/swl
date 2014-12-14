@@ -25,46 +25,32 @@ class LexerCombinations
      */
     private $combinedTokens;
 
+    /**
+     * @covers \swl\core\Lexer::analize
+     * @covers \swl\core\LexerCombinations::analize
+     * @param \swl\core\Lexer $lex
+     */
     public function __construct(\swl\core\Lexer $lex)
     {
         $this->lex = $lex;
-    }
 
-    /**
-     * @return \swl\core\Token[]
-     */
-    public function &GetTokens()
-    {
         $this->tokens = &$this->lex->analize();
 
-        $this->combinedTokens = &$this->analize();
-
-        return $this->combinedTokens;
-    }
-
-    public function &GetTokensWithoutWhitespaces()
-    {
-        $toks = &$this->GetTokens();
-
-        /* @var $token \swl\core\Token */
-        foreach ($toks as &$token)
-        {
-            if ($token->getType() === 'T_WHITESPACE') continue;
-
-            yield $token;
-        }
+        $this->combinedTokens = [];
     }
 
     /**
      * @return \swl\core\Token[]
      */
-    private function &analize()
+    public function GetTokens()
     {
+        if (count($this->combinedTokens) > 0) return $this->combinedTokens;
+
         /* @var $last\swl\core\Token Token */
         $lastToken = null;
 
         /* @var $token \swl\core\Token */
-        foreach ($this->tokens as &$token)
+        foreach ($this->tokens as $token)
         {
             if (in_array($token->getType(), \swl\core\Tokens::$_simpleTerminal))
             {
@@ -76,13 +62,13 @@ class LexerCombinations
                                                            $lastToken->getFile());
                     if ($tok)
                     {
-                        yield $tok;
+                        \array_push($this->combinedTokens, $tok);
 
                         $lastToken = null;
                         continue;
                     }
 
-                    yield $lastToken;
+                    \array_push($this->combinedTokens, $lastToken);
                 }
 
                 $lastToken = null;
@@ -114,12 +100,14 @@ class LexerCombinations
 
             if ($lastToken)
             {
-                yield $lastToken;
+                \array_push($this->combinedTokens, $lastToken);
                 $lastToken = null;
             }
 
-            yield $token;
+            \array_push($this->combinedTokens, $token);
         }
+
+        return $this->combinedTokens;
     }
 
 }

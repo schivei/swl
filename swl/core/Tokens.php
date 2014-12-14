@@ -32,7 +32,8 @@ final class Tokens
         '/^([\/])$/'        => 'T_DIVIDE',
         '/^([#])$/'         => 'T_HASH',
         '/^(\^)$/'          => 'T_BITWISE_XOR',
-        '/^([%])$/'         => 'T_MOD'
+        '/^([%])$/'         => 'T_MOD',
+        '/^([0-9])$/'       => 'T_DNUM'
     ];
 
     /**
@@ -99,12 +100,13 @@ final class Tokens
         '/^(event)$/'                                  => 'T_EVENT',
         '/^(reg\/)([^\n\r\/]+|(\\[^\n\r])+)(\/)(i)?$/' => 'T_REGEXP',
         '/^(env)$/'                                    => 'T_ENV',
-        '/^([_a-zA-Z][_a-zA-Z0-9]*)$/'                 => 'T_IDENTIFIER',
         '/^([\'])([^\']+|\\.+)([\'])$/'                => 'T_UNESCAPED_STRING',
         '/^(["])([^"]+|\\.+)(["])$/'                   => 'T_ESCAPED_STRING',
         '/^([-])?([0-9]+)([Ee][-+][0-9]+)?$/'          => 'T_INTEGER',
         '/^([-])?([0-9]+\.[0-9]+)([Ee][-+][0-9]+)?$/'  => 'T_FLOAT',
-        '/^(.+)$/'                                     => 'T_ANY'
+        '/^(\/\*.*\*\/)$/'                             => 'T_MULTILINE_COMMENT',
+        '/^(\/\/.*)$/'                                 => 'T_SINGLELINE_COMMENT',
+        '/^([_a-zA-Z][_a-zA-Z0-9]*)$/'                 => 'T_IDENTIFIER'
     ];
 
     /**
@@ -161,13 +163,20 @@ final class Tokens
         else if (\in_array($token, self::$_terminals))
                 $keys = \array_keys(self::$_terminals, $token);
 
-        return current($keys);
+        return $keys[0];
     }
 
     public static function ExceptInitialFiles()
     {
         return "controller, model, core, attribute, database, config, module, "
                 . "library or enum token.";
+    }
+
+    public static function allTerminals()
+    {
+        $term = \array_merge(self::$_simpleTerminal, self::$_specialTerminals,
+                             self::$_terminals);
+        return $term;
     }
 
 }

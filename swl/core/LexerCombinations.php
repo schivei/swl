@@ -35,16 +35,16 @@ class LexerCombinations
      */
     public function &GetTokens()
     {
-        $this->tokens = &$this->lex->analize();
+        $this->tokens = $this->lex->analize();
 
-        $this->combinedTokens = &$this->analize();
+        $this->combinedTokens = $this->analize();
 
         return $this->combinedTokens;
     }
 
     public function &GetTokensWithoutWhitespaces()
     {
-        $toks = &$this->GetTokens();
+        $toks = $this->GetTokens();
 
         /* @var $token \swl\core\Token */
         foreach ($toks as &$token)

@@ -44,7 +44,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
 
     private function &lexInstances($str)
     {
-        $instances = &Lexer::runString($str);
+        $instances = Lexer::runString($str);
         $this->assertInstanceOf(\Generator::class, $instances,
                                 'Test if Lexer return a Generator instance.');
         $linq      = new Linq($instances);
@@ -53,7 +53,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
 
     private function &lexFileInstances($file)
     {
-        $instances = &Lexer::run(\INCPATH . $file);
+        $instances = Lexer::run(\INCPATH . $file);
         $this->assertInstanceOf(\Generator::class, $instances,
                                 'Test if Lexer file return a Generator instance.');
         $linq      = new Linq($instances);
@@ -62,13 +62,13 @@ class LexerTest extends \PHPUnit_Framework_TestCase
 
     private function &lexInstance(Linq &$from)
     {
-        $stack = &$from->First();
+        $stack = $from->First();
         return $stack;
     }
 
     private function &lexLastInstance(Linq &$from)
     {
-        $stack = &$from->Last();
+        $stack = $from->Last();
         return $stack;
     }
 
@@ -93,13 +93,13 @@ class LexerTest extends \PHPUnit_Framework_TestCase
 
             $expected = $this->expecteds[$tok];
 
-            $from = &$this->lexInstances($tok);
+            $from = $this->lexInstances($tok);
 
             /* @var $instance Token */
-            $instance = &$this->lexInstance($from);
+            $instance = $this->lexInstance($from);
 
             /* @var $linstance Token */
-            $linstance = &$this->lexLastInstance($from);
+            $linstance = $this->lexLastInstance($from);
 
             $arr = $from->ToArray();
 
@@ -138,7 +138,7 @@ class LexerTest extends \PHPUnit_Framework_TestCase
     }
 }";
 
-        $from = &$this->lexInstances($content);
+        $from = $this->lexInstances($content);
 
         $this->assertCount(46, $from->ToArray(), "Test a SWL Controller code.");
 
@@ -165,11 +165,11 @@ class LexerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSWLControllerFileAndCountTokens()
     {
-        $from = &$this->lexFileInstances('controller.swl');
+        $from = $this->lexFileInstances('controller.swl');
 
         $arr = $from->ToArray();
 
-        $this->assertCount(102, $arr, "Test a SWL file Controller code.");
+        $this->assertCount(386, $arr, "Test a SWL file Controller code.");
 
         $comb = new LexerCombinations(new Lexer(\INCPATH . 'controller.swl'));
 
@@ -188,10 +188,10 @@ class LexerTest extends \PHPUnit_Framework_TestCase
         $arr  = $linq->ToArray();
         $narr = $nlinq->ToArray();
 
-        $this->assertCount(99, $arr,
+        $this->assertCount(376, $arr,
                            "Test a SWL file Controller code combinated.");
 
-        $this->assertCount(45, $narr,
+        $this->assertCount(165, $narr,
                            "Test a SWL file Controller code combinated.");
     }
 

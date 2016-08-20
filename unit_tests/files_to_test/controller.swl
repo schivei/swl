@@ -1,7 +1,27 @@
 controller Home {
-    action '/' -> index {
+    #before (edit) -> initialization;
+    #after (edit) -> saveUser;
+    action GET::'/' -> index {
         @view.exp = (2 ** 3) ** 8;
         @view.reg = reg/^(.+)$/i;
         @view.matched = @view.reg.isMatch('asd');
+    }
+
+    action GET::'/edit' -> edit([model] user:User);
+
+    action POST::'/save' -> edit([model] user:User);
+
+    event initialization (act:ActionInfo) {
+        @model = act.parameters[0].value;
+    }
+
+    event saveUser (act:ActionInfo) {
+        if(act.requestMethod is GET) return;
+        try {
+            @repository.save();
+            @redirectToAction(index);
+        } catch (e:Exception) {
+            @view.reportError(e);
+        }
     }
 }

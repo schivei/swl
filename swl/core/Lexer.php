@@ -33,7 +33,7 @@ class Lexer
     public static function &run($file)
     {
         $d = new \swl\core\Lexer($file);
-        $a = &$d->analize();
+        $a = $d->analize();
         return $a;
     }
 
@@ -309,7 +309,7 @@ class Lexer
 
     protected function _match($sequence)
     {
-        if (!$sequence) return 'T_WHITESPACE';
+        if (!strlen("{$sequence}")) return 'T_WHITESPACE';
 
         foreach (\swl\core\Tokens::$_terminals as $pattern => $name)
         {
@@ -322,7 +322,7 @@ class Lexer
 
     protected function _pairChar($char)
     {
-        if (!$char) return 'T_WHITESPACE';
+        if (!strlen("{$char}")) return 'T_WHITESPACE';
 
         foreach (\swl\core\Tokens::$_simpleTerminal as $pattern => $name)
         {
@@ -341,7 +341,7 @@ class Lexer
     public static function &runString($content)
     {
         $d = new self(null, $content);
-        $a = &$d->analize();
+        $a = $d->analize();
         return $a;
     }
 

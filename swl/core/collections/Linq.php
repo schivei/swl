@@ -63,7 +63,7 @@ class Linq extends Object
             return $this->count;
         }
 
-        $counter = &$this->loop($fn);
+        $counter = $this->loop($fn);
         $from    = new \swl\core\collections\Linq($counter);
 
         return $from->Count();
@@ -71,7 +71,7 @@ class Linq extends Object
 
     public function &Where(callable $fn)
     {
-        $from = &$this->loop($fn);
+        $from = $this->loop($fn);
         $f    = new \swl\core\collections\Linq($from);
 
         return $f;
@@ -99,7 +99,7 @@ class Linq extends Object
 
         if ($this->Count() > 0)
         {
-            $first = &$this->ToArray()[0];
+            $first = $this->ToArray()[0];
         }
 
         return $first;
@@ -111,7 +111,7 @@ class Linq extends Object
 
         if ($this->Count() > 0)
         {
-            $items = &$this->ToArray();
+            $items = $this->ToArray();
             $last  = &$items[$this->count - 1];
         }
 

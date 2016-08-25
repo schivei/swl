@@ -2,10 +2,6 @@
 
 namespace swl\core;
 
-use \Exception;
-
-require_once __DIR__ . \DIRECTORY_SEPARATOR . 'StateRegister.php';
-
 /**
  * Description of Loader
  *
@@ -21,8 +17,8 @@ class Loader
 
     private function __construct()
     {
-        $this->namespaces = \swl\core\Namespaces::GetInstance();
-        \swl\core\StateRegister::SetRegister(__CLASS__, $this);
+        $this->namespaces = \swl\core\Namespaces::getInstance();
+        \swl\core\StateRegister::setRegister(__CLASS__, $this);
 
         /* @var $loader \swl\core\Loader */
         $loader = $this;
@@ -30,13 +26,13 @@ class Loader
         spl_autoload_register(function ($path) use (&$loader)
         {
             /* @var $loader \swl\core\Loader */
-            $loader->Load($path);
+            $loader->load($path);
         }, true, true);
     }
 
-    public function Load($path)
+    public function load($path)
     {
-        $newPath = $this->namespaces->Match($path);
+        $newPath = $this->namespaces->match($path);
 
         $file = $newPath . '.php';
 

@@ -5,14 +5,14 @@ namespace swl\core\collections;
 use \ArrayIterator,
     \InvalidArgumentException,
     \Iterator,
-    \swl\core\types\Object;
+    \swl\core\types\TypeObject;
 
 /**
  * Description of Linq
  *
  * @author schivei
  */
-class Linq extends Object
+class Linq extends TypeObject
 {
 
     private $count = -1;

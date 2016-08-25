@@ -10,19 +10,20 @@ namespace swl\core;
 abstract class Register
 {
 
-    public static function SetRegister($name, &$value)
+    public static function setRegister($name, &$value)
     {
-        throw new \BadMethodCallException("Not implemented method.");
+        $value = $value;
+        throw new \BadMethodCallException("Not implemented method.\nCan not register {$name}");
     }
 
-    public static function &GetRegister($name)
+    public static function &getRegister($name)
     {
-        throw new \BadMethodCallException("Not implemented method.");
+        throw new \BadMethodCallException("Not implemented method.\nThe register '{$name}' do not exists");
     }
 
-    public static function UnsetRegister($name)
+    public static function unsetRegister($name)
     {
-        throw new \BadMethodCallException("Not implemented method.");
+        throw new \BadMethodCallException("Not implemented method.\nThe register '{$name}' do not exists");
     }
 
 }

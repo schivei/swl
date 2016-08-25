@@ -35,7 +35,7 @@ class TokensTest extends \PHPUnit_Framework_TestCase
     public function testDoubleAnalize()
     {
         $this->assertEquals(
-                null, Tokens::DoubleAnalize("a", 1, 0, "test.swl"),
+                null, Tokens::doubleAnalize("a", 1, 0, "test.swl"),
                                             "Test the fail double analizer."
         );
     }
@@ -52,7 +52,7 @@ class TokensTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals(
                 new Token("T_STATIC_CALL", "::", 1, 0, "test.swl"),
-                          Tokens::DoubleAnalize("::", 1, 0, "test.swl"),
+                          Tokens::doubleAnalize("::", 1, 0, "test.swl"),
                                                 "Test the succes double analizer."
         );
     }
@@ -65,7 +65,7 @@ class TokensTest extends \PHPUnit_Framework_TestCase
     public function testGetPattern()
     {
         $this->assertEquals(
-                '/^(::)$/', Tokens::GetPattern("T_STATIC_CALL"),
+                '/^(::)$/', Tokens::getPattern("T_STATIC_CALL"),
                                                "Test the special terminals get pattern"
         );
     }
@@ -78,7 +78,7 @@ class TokensTest extends \PHPUnit_Framework_TestCase
     public function testGetPattern2()
     {
         $this->assertEquals(
-                '/^(controller)$/', Tokens::GetPattern("T_CONTROLLER"),
+                '/^(controller)$/', Tokens::getPattern("T_CONTROLLER"),
                                                        "Test the terminals get pattern"
         );
     }
@@ -91,7 +91,7 @@ class TokensTest extends \PHPUnit_Framework_TestCase
     public function testGetPattern3()
     {
         $this->assertEquals(
-                '/^(;)$/', Tokens::GetPattern("T_EOL"),
+                '/^(;)$/', Tokens::getPattern("T_EOL"),
                                               "Test the simple terminals get pattern"
         );
     }
@@ -104,7 +104,7 @@ class TokensTest extends \PHPUnit_Framework_TestCase
     public function testGetPattern4()
     {
         $this->assertEquals(
-                null, Tokens::GetPattern("T_INVALID"),
+                null, Tokens::getPattern("T_INVALID"),
                                          "Test the invalid token get pattern"
         );
     }
@@ -117,7 +117,7 @@ class TokensTest extends \PHPUnit_Framework_TestCase
     public function testExceptInitialFiles()
     {
         $expected = "controller, model, core, attribute, database, config, module, library or enum token.";
-        $this->assertEquals($expected, Tokens::ExceptInitialFiles());
+        $this->assertEquals($expected, Tokens::exceptInitialFiles());
     }
 
 }

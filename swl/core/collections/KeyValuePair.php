@@ -3,7 +3,7 @@
 namespace swl\core\collections;
 
 use \InvalidArgumentException,
-    \Object;
+    \swl\core\types\TypeObject;
 
 /**
  * Description of KeyValuePair
@@ -14,13 +14,12 @@ use \InvalidArgumentException,
  * @property mixed $Value get value value
  * @property mixed $ValueType get value type
  */
-class KeyValuePair extends Object
+class KeyValuePair extends TypeObject
 {
 
     private $ktype;
     private $key;
     private $vtype;
-    private $value;
 
     public function __construct($t, $te, &$key, &$value)
     {

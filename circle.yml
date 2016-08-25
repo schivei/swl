@@ -1,0 +1,11 @@
+machine:
+  timezone:
+    America/Sao_Paulo
+  php:
+    - 5.6
+    - 7.0
+    - nightly
+
+test:
+  post:
+    - phpunit --configuration unit_tests/configuration.xml --coverage-html codeCoverage/ unit_tests/ --log-junit $CIRCLE_TEST_REPORTS/junit.xml

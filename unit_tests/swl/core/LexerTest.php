@@ -1,5 +1,7 @@
 <?php
 
+namespace swl\core;
+
 use \swl\core\collections\Linq,
     \swl\core\Lexer,
     \swl\core\LexerCombinations,
@@ -80,8 +82,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
      * @covers \swl\core\Token::__construct
      * @covers \swl\core\Token::test
      * @covers \swl\core\Tokens::GetPattern
-     * @covers \swl\core\Lexer::_pairChar
-     * @covers \swl\core\Lexer::_match
+     * @covers \swl\core\Lexer::pairChar
+     * @covers \swl\core\Lexer::match
      * @covers \swl\core\Token::serialize
      * @covers \swl\core\Token::unserialize
      */
@@ -126,29 +128,36 @@ class LexerTest extends \PHPUnit_Framework_TestCase
      * @covers \swl\core\Lexer::analize
      * @covers \swl\core\Token::test
      * @covers \swl\core\Tokens::GetPattern
-     * @covers \swl\core\Lexer::_pairChar
-     * @covers \swl\core\Lexer::_match
+     * @covers \swl\core\Lexer::pairChar
+     * @covers \swl\core\Lexer::match
      * @covers \swl\core\LexerCombinations::GetTokensWithoutWhitespaces
+     * @covers \swl\core\LexerCombinations::__construct
+     * @covers \swl\core\LexerCombinations::analize
      */
     public function testSWLStringCodeAndCountTokens()
     {
         $content = "controller MyController {
     action '/' -> index {
+        !(StaticClass::count() * 2 - 3 & 7 | 9 + @view.total);
         @view.data = \"Test\";
     }
 }";
 
         $from = $this->lexInstances($content);
 
-        $this->assertCount(46, $from->ToArray(), "Test a SWL Controller code.");
+        $this->assertCount(88, $from->ToArray(), "Test a SWL Controller code.");
 
         $comb = new LexerCombinations(new Lexer(null, $content));
 
-        $ntokens = $comb->GetTokensWithoutWhitespaces();
+        $ntokens = $comb->getTokensWithoutWhitespaces();
+        
+        \file_put_contents('jj.json', \serialize($from->ToArray()));
 
         $from = new Linq($ntokens);
+        
+        file_put_contents('j.json', \serialize($from->ToArray()));
 
-        $this->assertCount(17, $from->ToArray(),
+        $this->assertCount(39, $from->ToArray(),
                            "Test a SWL Controller code combined.");
     }
 
@@ -158,8 +167,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
      * @covers \swl\core\Lexer::analize
      * @covers \swl\core\Token::test
      * @covers \swl\core\Tokens::GetPattern
-     * @covers \swl\core\Lexer::_pairChar
-     * @covers \swl\core\Lexer::_match
+     * @covers \swl\core\Lexer::pairChar
+     * @covers \swl\core\Lexer::match
      * @covers \swl\core\LexerCombinations::GetTokens
      * @covers \swl\core\LexerCombinations::GetTokensWithoutWhitespaces
      */
@@ -173,8 +182,8 @@ class LexerTest extends \PHPUnit_Framework_TestCase
 
         $comb = new LexerCombinations(new Lexer(\INCPATH . 'controller.swl'));
 
-        $tokens  = $comb->GetTokens();
-        $ntokens = $comb->GetTokensWithoutWhitespaces();
+        $tokens  = $comb->getTokens();
+        $ntokens = $comb->getTokensWithoutWhitespaces();
 
         $this->assertInstanceOf(\Generator::class, $tokens,
                                 'Test if Lexer Combinations return a Generator instance.');

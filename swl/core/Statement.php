@@ -26,9 +26,9 @@ class Statement
         $this->childs = $childs;
     }
 
-    public static function &Prepare(\Iterator $tokens)
+    public static function &prepare(\Iterator $tokens)
     {
-        
+        return $tokens;
     }
 
 }

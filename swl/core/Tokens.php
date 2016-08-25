@@ -5,7 +5,7 @@ namespace swl\core;
 final class Tokens
 {
 
-    public static $_simpleTerminal = [
+    public static $simpleTerminal = [
         '/^(:)$/'           => 'T_DOUBLECOMMA',
         '/^(,)$/'           => 'T_COLLON',
         '/^(;)$/'           => 'T_EOL',
@@ -16,11 +16,11 @@ final class Tokens
         '/^(\()$/'          => 'T_OPEN_STATEMENT',
         '/^(\))$/'          => 'T_CLOSE_STATEMENT',
         '/^([ \n\r\t\f])$/' => 'T_WHITESPACE',
-        '/^(\.)$/'          => 'T_CONCATENATE',
+        '/^(\.)$/'          => 'T_OBJ_ACCESSOR',
         '/^(<)$/'           => 'T_MINOR',
         '/^(>)$/'           => 'T_MAJOR',
         '/^(&)$/'           => 'T_BITWISE_AND',
-        '/^(|)$/'           => 'T_BITWISE_OR',
+        '/^(\|)$/'          => 'T_BITWISE_OR',
         '/^(@)$/'           => 'T_THIS_OBJECT', // like $this->
         '/^(")$/'           => 'T_DOUBLEQUOTE',
         '/^(\')$/'          => 'T_QUOTE',
@@ -39,7 +39,7 @@ final class Tokens
      * Special Terminals
      * @var string[]
      */
-    public static $_specialTerminals = [
+    public static $specialTerminals = [
         '/^(=>)$/'   => 'T_ARRAY_ASSOC',
         '/^(->)$/'   => 'T_COMMAND_RUN_SEP',
         '/^(::)$/'   => 'T_STATIC_CALL',
@@ -60,7 +60,7 @@ final class Tokens
      * Complex terminals
      * @var string[]
      */
-    public static $_terminals = [
+    public static $terminals = [
         '/^(core)$/'                                   => 'T_CORE_REWRITE',
         '/^(database)$/'                               => 'T_DATABASE',
         '/^(attribute)$/'                              => 'T_ATTRIBUTE',
@@ -115,26 +115,25 @@ final class Tokens
      * @assert ("a", 1, 0) == null
      * @assert ("::", 1, 0) == new Token("T_STATIC_CALL", "::", 1, 0)
      */
-    public static function DoubleAnalize($sequence, $line, $initialPosition,
+    public static function doubleAnalize($sequence, $line, $initialPosition,
                                          $file)
     {
+        $token = null;
 
-        $filtered = \array_filter(\array_keys(static::$_specialTerminals),
+        $filtered = \array_filter(\array_keys(static::$specialTerminals),
                                               function($pattern) use ($sequence)
         {
             return !!\preg_match($pattern, $sequence);
         });
 
-
-
         if (\count($filtered) > 0)
-                return new Token(static::$_specialTerminals[\current($filtered)],
-                                                                     $sequence,
-                                                                     $line,
-                                                                     $initialPosition,
-                                                                     $file);
+                $token = new Token(static::$specialTerminals[\current($filtered)],
+                                                                      $sequence,
+                                                                      $line,
+                                                                      $initialPosition,
+                                                                      $file);
 
-        return null;
+        return $token;
     }
 
     /**
@@ -142,7 +141,7 @@ final class Tokens
      */
     private function __construct()
     {
-
+        
     }
 
     /**
@@ -151,20 +150,20 @@ final class Tokens
      * @assert ("T_STATIC_CALL") == '/^(::)$/'
      * @assert ("T_CONTROLLER") == '/^(controller)$/'
      */
-    public static function GetPattern($token)
+    public static function getPattern($token)
     {
         $keys = [null];
-        if (\in_array($token, self::$_simpleTerminal))
-                $keys = \array_keys(self::$_simpleTerminal, $token);
-        else if (\in_array($token, self::$_specialTerminals))
-                $keys = \array_keys(self::$_specialTerminals, $token);
-        else if (\in_array($token, self::$_terminals))
-                $keys = \array_keys(self::$_terminals, $token);
+        if (\in_array($token, self::$simpleTerminal))
+                $keys = \array_keys(self::$simpleTerminal, $token);
+        else if (\in_array($token, self::$specialTerminals))
+                $keys = \array_keys(self::$specialTerminals, $token);
+        else if (\in_array($token, self::$terminals))
+                $keys = \array_keys(self::$terminals, $token);
 
-        return current($keys);
+        return \current($keys);
     }
 
-    public static function ExceptInitialFiles()
+    public static function exceptInitialFiles()
     {
         return "controller, model, core, attribute, database, config, module, "
                 . "library or enum token.";

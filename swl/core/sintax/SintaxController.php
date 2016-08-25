@@ -11,7 +11,7 @@ use \Iterator,
  *
  * @author schivei
  */
-class SintaxController implements \swl\core\sintax\ISintax
+class SintaxController extends \swl\core\types\TypeObject implements \swl\core\sintax\ISintax
 {
 
     /**

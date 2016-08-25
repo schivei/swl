@@ -14,10 +14,10 @@ class Namespaces extends StateRegister
 
     public function __construct()
     {
-        static::SetRegister(__CLASS__, $this);
+        static::setRegister(__CLASS__, $this);
     }
 
-    public function Add($space, $path)
+    public function add($space, $path)
     {
         $path .= $path[\strlen($path) - 1] === \DIRECTORY_SEPARATOR ? '' : \DIRECTORY_SEPARATOR;
 
@@ -26,41 +26,42 @@ class Namespaces extends StateRegister
         $this->namespaces[$space] = $path;
     }
 
-    public function Get($space)
+    public function get($space)
     {
         $space = $space[0] === '\\' ? substr($space, 1) : $space;
 
         return isset($this->namespaces[$space]) ? $this->namespaces[$space] : null;
     }
 
-    public function Match($space)
+    public function match($space)
     {
         $space = $space[0] === '\\' ? substr($space, 1) : $space;
 
-        $ns = $this->Get($space);
-        if ($ns) return $ns;
+        $ns = $this->get($space);
+        if (!$ns)
+                foreach ($this->namespaces as $n => $path) {
+                if (\strlen($space) < \strlen($n)) continue;
 
-        foreach ($this->namespaces as $n => $path)
-        {
-            if (\strlen($space) < \strlen($n)) continue;
+                $pattern = "/^({$n}\\)";
+                $pat     = str_replace('\\', '\\\\', $pattern . '/');
 
-            $pattern = "/^({$n}\\)";
-            $pat     = str_replace('\\', '\\\\', $pattern . '/');
-
-            if (\preg_match($pat, $space))
-            {
-                return \str_replace('\\', \DIRECTORY_SEPARATOR,
-                                    $path . \str_replace($n . '\\', '', $space));
+                if (\preg_match($pat, $space)) {
+                    $ns = \str_replace('\\', \DIRECTORY_SEPARATOR,
+                                       $path . \str_replace($n . '\\', '',
+                                                            $space));
+                    break;
+                }
             }
-        }
+
+        return $ns;
     }
 
     /**
      * @return Namespaces
      */
-    public static function &GetInstance()
+    public static function &getInstance()
     {
-        $inst = static::GetRegister(__CLASS__)? : (new self());
+        $inst = static::getRegister(__CLASS__)? : (new self());
 
         return $inst;
     }

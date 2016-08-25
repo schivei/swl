@@ -7,7 +7,20 @@ namespace swl\core\sintax;
  *
  * @author schivei
  */
-class SintaxModule implements ISintax
+class SintaxModule extends \swl\core\types\TypeObject implements ISintax
 {
-//put your code here
+    public function __construct(\Iterator $tokens)
+    {
+        $this->value = $tokens;
+    }
+
+    public function getAParsedCommentedFile()
+    {
+        
+    }
+
+    public function getParsedFiles()
+    {
+        
+    }
 }

@@ -18,8 +18,8 @@ namespace swl
             try {
 
                 /* @var $ns Namespaces */
-                $ns = Namespaces::GetInstance();
-                $ns->Add(__NAMESPACE__, __DIR__);
+                $ns = Namespaces::getInstance();
+                $ns->add(__NAMESPACE__, __DIR__);
 
                 Loader::init();
 

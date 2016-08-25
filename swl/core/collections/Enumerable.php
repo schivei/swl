@@ -6,7 +6,7 @@ use \ArrayIterator,
     \OverflowException,
     \swl\core\collections\IEnumerable,
     \swl\core\collections\Linq,
-    \swl\core\types\String;
+    \swl\core\types\TypeString;
 
 /**
  * Description of Enumerable
@@ -15,16 +15,6 @@ use \ArrayIterator,
  */
 abstract class Enumerable extends Linq implements IEnumerable
 {
-
-    public function count()
-    {
-        return $this->value === NULL ? 0 : strlen($this->value);
-    }
-
-    public function getIterator()
-    {
-        return new ArrayIterator($this->value);
-    }
 
     public function offsetExists($offset)
     {
@@ -41,7 +31,7 @@ abstract class Enumerable extends Linq implements IEnumerable
         if ($this->offsetExists($offset)) $this->value[$offset] = $value;
         else if ($this->count() === $offset) $this->value .= $value;
         else
-                throw new OverflowException(String::Format("A posição %d está fora do limite.",
+                throw new OverflowException(TypeString::Format("A posição %d está fora do limite.",
                                                            $offset));
     }
 

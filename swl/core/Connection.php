@@ -15,7 +15,7 @@ class Connection
         
     }
 
-    public function ExecuteCommand($query, ...$params = [])
+    public function ExecuteCommand($query, ...$params)
     {
 
     }

@@ -7,7 +7,7 @@ namespace swl\core\sintax;
  *
  * @author schivei
  */
-class SintaxAttribute implements ISintax
+class SintaxAttribute extends \swl\core\types\TypeObject implements ISintax
 {
 
     public function getAParsedCommentedFile()
@@ -18,6 +18,11 @@ class SintaxAttribute implements ISintax
     public function getParsedFiles()
     {
 
+    }
+
+    public function __construct(\Iterator $tokens)
+    {
+        $this->value = $tokens;
     }
 
 }

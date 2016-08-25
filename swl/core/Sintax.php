@@ -2,28 +2,18 @@
 
 namespace swl\core;
 
-use \Generator,
-    \Generator,
-    \Iterator,
+use \Generator
     \Iterator,
     \swl\core\collections\Linq,
-    \swl\core\collections\Linq,
-    \swl\core\exceptions\SintaxException,
     \swl\core\exceptions\SintaxException,
     \swl\core\sintax\SintaxAttribute,
-    \swl\core\sintax\SintaxAttribute,
-    \swl\core\sintax\SintaxConfiguration,
     \swl\core\sintax\SintaxConfiguration,
     \swl\core\sintax\SintaxController,
-    \swl\core\sintax\SintaxController,
-    \swl\core\sintax\SintaxCoreRewrite,
     \swl\core\sintax\SintaxCoreRewrite,
     \swl\core\sintax\SintaxDatabase,
     \swl\core\sintax\SintaxEnum,
     \swl\core\sintax\SintaxLibrary,
     \swl\core\sintax\SintaxModel,
-    \swl\core\sintax\SintaxModel,
-    \swl\core\sintax\SintaxModule,
     \swl\core\sintax\SintaxModule,
     \swl\core\Token;
 
@@ -47,7 +37,7 @@ class Sintax
 
     public function run()
     {
-        $analizers = $this->analize();
+        /*$analizers = */$this->analize();
     }
 
     /**
@@ -110,7 +100,7 @@ class Sintax
 
                 default:
                     throw new SintaxException("Invalid initial Token in file. Expected: " .
-                    Tokens::ExceptInitialFiles(), $tok);
+                    Tokens::exceptInitialFiles(), $tok);
             }
         }
     }

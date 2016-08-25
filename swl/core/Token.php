@@ -121,17 +121,14 @@ class Token implements Serializable
      */
     public function test($token, $sequence)
     {
-        $tok = \in_array($token, \swl\core\Tokens::$_simpleTerminal)
-                || \in_array($token, \swl\core\Tokens::$_specialTerminals)
-                || \in_array($token, \swl\core\Tokens::$_terminals);
+        $tok = \in_array($token, \swl\core\Tokens::$simpleTerminal)
+                || \in_array($token, \swl\core\Tokens::$specialTerminals)
+                || \in_array($token, \swl\core\Tokens::$terminals);
 
         if (!$tok)
                 throw new InvalidArgumentException("The token '{$token}' is invalid.");
 
-        $pattern = \swl\core\Tokens::GetPattern($token);
-
-        if (null === $pattern)
-                throw new InvalidArgumentException("The sequence is not a '{$token}' token.");
+        $pattern = \swl\core\Tokens::getPattern($token);
 
         if (!\preg_match($pattern, $sequence))
                 throw new InvalidArgumentException("The sequence is not a '{$token}::{$sequence}' token.");

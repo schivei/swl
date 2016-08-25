@@ -2,8 +2,8 @@
 
 namespace swl\core;
 
-use \swl\core\types\Object,
-    \swl\core\types\String,
+use \swl\core\types\TypeObject,
+    \swl\core\types\TypeString,
     \swl\core\View;
 
 /**
@@ -11,7 +11,7 @@ use \swl\core\types\Object,
  *
  * @author schivei
  */
-abstract class Controller extends Object
+abstract class Controller extends TypeObject
 {
 
     /**
@@ -26,7 +26,7 @@ abstract class Controller extends Object
         $this->_view = new View();
     }
 
-    final protected function setView(String $viewName)
+    final protected function setView(TypeString $viewName)
     {
         $this->_view = new View($viewName);
     }

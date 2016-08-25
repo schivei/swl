@@ -33,7 +33,7 @@ class LexerCombinations
     /**
      * @return \swl\core\Token[]
      */
-    public function &GetTokens()
+    public function &getTokens()
     {
         $this->tokens = $this->lex->analize();
 
@@ -42,9 +42,9 @@ class LexerCombinations
         return $this->combinedTokens;
     }
 
-    public function &GetTokensWithoutWhitespaces()
+    public function &getTokensWithoutWhitespaces()
     {
-        $toks = $this->GetTokens();
+        $toks = $this->getTokens();
 
         /* @var $token \swl\core\Token */
         foreach ($toks as &$token)
@@ -66,15 +66,15 @@ class LexerCombinations
         /* @var $token \swl\core\Token */
         foreach ($this->tokens as &$token)
         {
-            if (in_array($token->getType(), \swl\core\Tokens::$_simpleTerminal))
+            if (in_array($token->getType(), \swl\core\Tokens::$simpleTerminal))
             {
                 if ($lastToken)
                 {
-                    $tok = \swl\core\Tokens::DoubleAnalize($lastToken->getSequence() . $token->getSequence(),
+                    $tok = \swl\core\Tokens::doubleAnalize($lastToken->getSequence() . $token->getSequence(),
                                                            $lastToken->getLine(),
                                                            $lastToken->getPosition(),
                                                            $lastToken->getFile());
-                    if ($tok)
+                    if ($tok !== null)
                     {
                         yield $tok;
 

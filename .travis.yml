@@ -1,4 +1,6 @@
 language: php
 php:
   - 5.6
+  - 7.0
+  - nightly
 script: phpunit --configuration unit_tests/configuration.xml --coverage-html codeCoverage/ unit_tests/

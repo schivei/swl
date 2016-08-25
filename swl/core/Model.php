@@ -1,5 +1,7 @@
 <?php
 
+namespace swl\core;
+
 /**
  * Description of Model
  *

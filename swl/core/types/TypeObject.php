@@ -7,7 +7,7 @@ namespace swl\core\types;
  *
  * @author schivei
  */
-class Object
+class TypeObject
 {
 
     protected $value;
